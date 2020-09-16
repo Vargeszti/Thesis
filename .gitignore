@@ -2,3 +2,4 @@
 *.csv
 *.xlsx
 code/.ipynb_checkpoints/genes_from_creeds_NN-checkpoint.ipynb
+*.txt
