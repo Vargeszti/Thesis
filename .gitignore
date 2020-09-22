@@ -3,3 +3,5 @@
 *.xlsx
 code/.ipynb_checkpoints/genes_from_creeds_NN-checkpoint.ipynb
 *.txt
+.DS_Store
+code/.ipynb_checkpoints/pandas_merge_example-checkpoint.ipynb
