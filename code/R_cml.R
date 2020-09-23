@@ -1,4 +1,4 @@
-setwd("~/Documents/Projects/VargaEszter/Thesis/code")
+setwd("C:/Users/nidik/Desktop/MSc/Szakdoga/Thesis/code")
 
 par1= commandArgs(TRUE)[1]
 par2 = commandArgs(TRUE)[2]
