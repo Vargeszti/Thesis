@@ -1,17 +1,18 @@
-setwd("~/Documents/Projects/VargaEszter/Thesis/code")
+setwd("../Desktop/MSc/Szakdoga/Thesis/code/")
 library(GEOquery)
 library(limma)
 library(Biobase)
 
 
 drug_perturb = read.csv('../results/drug_perturb.csv', sep=',', header=TRUE, row.names=1)
-for (i in rownames(drug_perturb)[1:3]){
+for (i in rownames(drug_perturb)){
   print(paste0(i,' experiment'))
   geo_id = drug_perturb[i, "geo_id" ]
   ctrl = drug_perturb[i, "ctrl_ids" ]
   stim = drug_perturb[i,  "pert_ids" ]
   sign = drug_perturb[i,  "sign" ]
   fname = i
+  
   ctrl = strsplit(ctrl, '|', fixed = TRUE)[[1]]
   stim = strsplit(stim, '|', fixed = TRUE)[[1]]
   data = getGEO(geo_id, GSEMatrix=TRUE, AnnotGPL = TRUE)
@@ -50,8 +51,10 @@ for (i in rownames(drug_perturb)[1:3]){
   results = topTable(fit, coef = 'x', adjust="BH",number = 1000000)
   results$logFC = results$logFC * as.integer(sign)
   results$t = results$t * as.integer(sign)
-  write.csv(results, paste0('../results/expression_data/',fname,'.csv'))
+  write.csv(results, paste0('../results/drug_perturb/',fname,'.csv'))
 }
+
+
 ### first experiment: 
 #geo_id = commandArgs(TRUE)[1]
 #ctrl = commandArgs(TRUE)[2]
