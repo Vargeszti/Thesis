@@ -16,6 +16,8 @@ eset = as.data.frame(eset)
 annot = fData(data)$`Gene symbol`
 eset$MEAN = apply(eset, 1, mean)
 eset$GENE = annot
+fil=eset$GENE!=''
+eset=eset[fil,]
 eset = eset[order(eset$MEAN, decreasing = TRUE),]
 eset = eset[!duplicated(eset$GENE),]
 rownames(eset) = eset$GENE
