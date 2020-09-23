@@ -1,30 +1,40 @@
-setwd('C:/Users/nidik/Desktop/MSc/Szakdoga/Thesis/code/')
+setwd("~/Documents/Projects/VargaEszter/Thesis/code")
 library(GEOquery)
 library(limma)
-require(Biobase)
+library(Biobase)
 
 ### first experiment: 
 geo_id = commandArgs(TRUE)[1]
 ctrl = commandArgs(TRUE)[2]
 stim = commandArgs(TRUE)[3]
 sign = commandArgs(TRUE)[4]
+fname = commandArgs(TRUE)[5]
+
+#geo_id = 'GSE4028'
+#ctrl = 'GSM92214|GSM92215|GSM92216'
+#stim = 'GSM92217|GSM92218|GSM92219|GSM92220'
+#sign = '1'
+#fname = '1374'
 
 ctrl = strsplit(ctrl, '|', fixed = TRUE)[[1]]
 stim = strsplit(stim, '|', fixed = TRUE)[[1]]
 data = getGEO(geo_id, GSEMatrix=TRUE, AnnotGPL = TRUE)
 data = data[[1]]
-eset = exprs(data) 
+eset = exprs(data)
+fil = apply(is.na(eset), 1, sum) == 0
+eset = eset[fil,]
+if (max(eset) > 1000){
+  eset = log2(eset+1)
+}
 eset = as.data.frame(eset)
 annot = fData(data)$`Gene symbol`
+annot = annot[fil]
 eset$MEAN = apply(eset, 1, mean)
 eset$GENE = annot
-<<<<<<< Updated upstream
+
 fil=eset$GENE!=''
 eset=eset[fil,]
-=======
-fil = eset$GENE != ''
-eset = eset[fil,]
->>>>>>> Stashed changes
+
 eset = eset[order(eset$MEAN, decreasing = TRUE),]
 eset = eset[!duplicated(eset$GENE),]
 rownames(eset) = eset$GENE
@@ -42,6 +52,6 @@ eset = eset[ ,rownames(design)]
 fit <- lmFit(eset, design) 
 fit = eBayes(fit)
 results = topTable(fit, coef = 'x', adjust="BH",number = 1000000)
-results$logFC = results$logFC * sign
-results$t = results$t * sign
-write.csv(results, '../results/GSE32316.csv')
+results$logFC = results$logFC * as.integer(sign)
+results$t = results$t * as.integer(sign)
+write.csv(results, paste0('../results/expression_data/',fname,'.csv'))
