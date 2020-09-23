@@ -1,4 +1,4 @@
-setwd('')
+setwd('C:/Users/nidik/Desktop/MSc/Szakdoga/Thesis/code/')
 library(GEOquery)
 library(limma)
 require(Biobase)
