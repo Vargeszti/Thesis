@@ -1,16 +1,16 @@
-setwd("../Desktop/MSc/Szakdoga/Thesis/code/")
+#setwd("../Desktop/MSc/Szakdoga/Thesis/code/")
 library(GEOquery)
 library(limma)
 library(Biobase)
 
 
-drug_perturb = read.csv('../results/drug_perturb.csv', sep=',', header=TRUE, row.names=1)
-for (i in rownames(drug_perturb)){
+gene_perturb = read.csv('../results/gene_perturb.csv', sep=',', header=TRUE, row.names=1)
+for (i in rownames(gene_perturb)){
   print(paste0(i,' experiment'))
-  geo_id = drug_perturb[i, "geo_id" ]
-  ctrl = drug_perturb[i, "ctrl_ids" ]
-  stim = drug_perturb[i,  "pert_ids" ]
-  sign = drug_perturb[i,  "sign" ]
+  geo_id = gene_perturb[i, "geo_id" ]
+  ctrl = gene_perturb[i, "ctrl_ids" ]
+  stim = gene_perturb[i,  "pert_ids" ]
+  sign = gene_perturb[i,  "sign" ]
   fname = i
   
   ctrl = strsplit(ctrl, '|', fixed = TRUE)[[1]]
@@ -31,9 +31,14 @@ for (i in rownames(drug_perturb)){
   
   fil=eset$GENE!=''
   eset=eset[fil,]
+  fil=eset$GENE!='NA'
+  eset=eset[fil,]
   
   eset = eset[order(eset$MEAN, decreasing = TRUE),]
   eset = eset[!duplicated(eset$GENE),]
+  fil=rownames(eset)!='NA'
+  eset=eset[fil,]
+  
   rownames(eset) = eset$GENE
   n = dim(eset)[2]
   eset = eset[,c(-n, -n+1)]
@@ -51,7 +56,7 @@ for (i in rownames(drug_perturb)){
   results = topTable(fit, coef = 'x', adjust="BH",number = 1000000)
   results$logFC = results$logFC * as.integer(sign)
   results$t = results$t * as.integer(sign)
-  write.csv(results, paste0('../results/drug_perturb/',fname,'.csv'))
+  write.csv(results, paste0('../results/gene_perturb/',fname,'.csv'))
 }
 
 
