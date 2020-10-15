@@ -26,3 +26,4 @@ results/drug_perturb_A
 *.zip
 code/.ipynb_checkpoints/afatinib-checkpoint.ipynb
 code/.ipynb_checkpoints/scRNAseq-checkpoint.ipynb
+code/.ipynb_checkpoints/lincs_data_new-checkpoint.ipynb
