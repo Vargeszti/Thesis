@@ -21,3 +21,8 @@ code/.ipynb_checkpoints/call_R-checkpoint.ipynb
 code/.ipynb_checkpoints/benchmark_data-checkpoint.ipynb
 code/.ipynb_checkpoints/similarities-checkpoint.ipynb
 results/drug_perturb_A
+*.tsv
+*.mtx
+*.zip
+code/.ipynb_checkpoints/afatinib-checkpoint.ipynb
+code/.ipynb_checkpoints/scRNAseq-checkpoint.ipynb
