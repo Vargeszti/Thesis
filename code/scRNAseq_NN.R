@@ -8,6 +8,7 @@ scrna_expression =  read.csv('../data/scrnaseq/test_mat.csv', sep=',', header=TR
 sample_info=read.csv('../data/scrnaseq/meta_data_smartseq2.csv', sep=',', header=TRUE, row.names=1)
 sample_info = sample_info$nnet2 # contains meta-information about the cells
 
+expression_scaled = scrna_expression %>% scale_quantile()
 
 #which genes are expressed
 CAF_ids = sample_info %>% filter(`Lymph node` == 0) %>% filter((tumor %in% tumors_remove == FALSE)) %>% filter(`non-cancer cell type` == "CAF") %>% .$cell
