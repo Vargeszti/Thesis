@@ -17,3 +17,4 @@ lr_network = readRDS(url("https://zenodo.org/record/3260758/files/lr_network.rds
 write.csv(ligand_target_matrix,'../data/ligand_target_matrix.csv')
 write.csv(lr_network,'../data/lr_network.csv')
 
+
