@@ -1,4 +1,4 @@
-setwd("../Desktop/MSc/Szakdoga/Thesis/code/")
+#setwd("../Desktop/MSc/Szakdoga/Thesis/code/")
 library(nichenetr)
 library(tidyverse)
 
