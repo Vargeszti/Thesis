@@ -6,10 +6,33 @@ library(tidyverse)
 scrna_expression =  read.csv('../data/scrnaseq/test_mat.csv', sep=',', header=TRUE, row.names=1)
 #expression = scrna_expression$expression
 sample_info=read.csv('../data/scrnaseq/meta_data_smartseq2.csv', sep=',', header=TRUE, row.names=1)
+scrna_expression = scrna_expression[,rownames(sample_info)]
 sample_info = sample_info$nnet2 # contains meta-information about the cells
-
+fil = sample_info!= 'HEK cells'
+sample_info = sample_info[fil]
+scrna_expression = scrna_expression[,fil]
+fil = apply(scrna_expression,1, mean) != 0
+scrna_expression = scrna_expression[fil,]
 expression_scaled = scrna_expression %>% scale_quantile()
+write.csv(expression_scaled, '../results/nn_scrnaseq_scaled.csv')
 
+ligands = colnames(ligand_target_matrix)
+fil = ligands!='CLDN24'
+ligands = ligands[fil]
+ligand_target_matrix = ligand_target_matrix[,ligands]
+ligand_activities = predict_single_cell_ligand_activities(cell_ids = sample_info,
+                                                          expression_scaled = expression_scaled,
+                                                          ligand_target_matrix = ligand_target_matrix, 
+                                                          potential_ligands = colnames(ligand_target_matrix))
+
+
+
+
+
+
+
+ligand_activities = predict_single_cell_ligand_activities(cell_ids = sample_info, expression_scaled = expression_scaled,
+                                                          ligand_target_matrix = ligand_target_matrix)
 #which genes are expressed
 CAF_ids = sample_info %>% filter(`Lymph node` == 0) %>% filter((tumor %in% tumors_remove == FALSE)) %>% filter(`non-cancer cell type` == "CAF") %>% .$cell
 malignant_ids = sample_info %>% filter(`Lymph node` == 0) %>% filter(`classified  as cancer cell` == 1) %>% filter((tumor %in% tumors_remove == FALSE)) %>% .$cell
