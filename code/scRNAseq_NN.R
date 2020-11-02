@@ -15,6 +15,9 @@ fil = apply(scrna_expression,1, mean) != 0
 scrna_expression = scrna_expression[fil,]
 expression_scaled = scrna_expression %>% scale_quantile()
 write.csv(expression_scaled, '../results/nn_scrnaseq_scaled.csv')
+#Load the ligand-target model
+ligand_target_matrix = readRDS(url("https://zenodo.org/record/3260758/files/ligand_target_matrix.rds"))
+ligand_target_matrix[1:5,1:5]# target genes in rows, ligands in columns
 
 ligands = colnames(ligand_target_matrix)
 fil = ligands!='CLDN24'
@@ -26,11 +29,6 @@ ligand_activities = predict_single_cell_ligand_activities(cell_ids = sample_info
                                                           potential_ligands = colnames(ligand_target_matrix))
 
 
-
-
-
-
-
 ligand_activities = predict_single_cell_ligand_activities(cell_ids = sample_info, expression_scaled = expression_scaled,
                                                           ligand_target_matrix = ligand_target_matrix)
 #which genes are expressed
@@ -39,9 +37,7 @@ malignant_ids = sample_info %>% filter(`Lymph node` == 0) %>% filter(`classified
 expressed_genes_CAFs = expression[CAF_ids,] %>% apply(2,function(x){10*(2**x - 1)}) %>% apply(2,function(x){log2(mean(x) + 1)}) %>% .[. >= 4] %>% names()
 expressed_genes_malignant = expression[malignant_ids,] %>% apply(2,function(x){10*(2**x - 1)}) %>% apply(2,function(x){log2(mean(x) + 1)}) %>% .[. >= 4] %>% names()
 
-#Load the ligand-target model
-ligand_target_matrix = readRDS(url("https://zenodo.org/record/3260758/files/ligand_target_matrix.rds"))
-ligand_target_matrix[1:5,1:5]# target genes in rows, ligands in columns
+
 
 
 #NichNet single-cell ligand activity analysis
